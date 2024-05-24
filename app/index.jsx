@@ -1,9 +1,10 @@
 import { StatusBar } from "expo-status-bar";
-import { Redirect, router } from "expo-router";
-import { View, Text, Image, ScrollView, Button } from "react-native";
+import { router } from "expo-router";
+import { View, Image, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import CustomButton from "../components/CustomButton";
+import { images } from "../constants";
 
 const Welcome = () => {
   return (
@@ -13,9 +14,15 @@ const Welcome = () => {
           height: "100%",
         }}
       >
-        <View className="w-full flex justify-center items-center h-full px-4">
+        <View className="w-full flex justify-center items-center h-full px-4 ">
+          <Image
+            source={images.logo}
+            resizeMode="contain"
+            className="w-[115px] h-[200px]"
+          />
           <CustomButton
-            title="Continue with Email"
+            title="Connectez-vous"
+            textStyles="font-psemibold"
             handlePress={() => router.push("/sign-in")}
             containerStyles="w-full mt-7"
           />
