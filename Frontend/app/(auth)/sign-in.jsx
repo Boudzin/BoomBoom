@@ -39,19 +39,13 @@ const SignIn = () => {
     <SafeAreaView className="bg-primary h-full">
       <ScrollView>
         <View
-          className="w-full flex justify-center px-4 my-6"
+          className="w-full flex justify-center items-center px-4"
           style={{
             minHeight: Dimensions.get("window").height - 100,
           }}
         >
-          <Image
-            source={images.logo}
-            resizeMode="contain"
-            className="w-[115px] h-[34px]"
-          />
-
-          <Text className="text-2xl font-semibold text-black mt-10 font-psemibold">
-            Log in
+          <Text className="text-2xl font-semibold text-[#734789] mt-10 font-psemibold">
+            Connectez-vous
           </Text>
 
           <FormField
@@ -76,15 +70,15 @@ const SignIn = () => {
             isLoading={isSubmitting}
           />
 
-          <View className="flex justify-center pt-5 flex-row gap-2">
-            <Text className="text-lg text-gray-100 font-pregular">
-              Vous n'avez pas de compte
+          <View className="flex justify-center items-center pt-4">
+            <Text className="text-lg text-black font-pregular">
+              Vous n'avez pas de compte ?
             </Text>
             <Link
               href="/sign-up"
               className="text-lg font-psemibold text-secondary"
             >
-              Signup
+              Créer un compte
             </Link>
           </View>
         </View>

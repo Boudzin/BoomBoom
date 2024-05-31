@@ -18,11 +18,11 @@ const Welcome = () => {
           <Image
             source={images.logo}
             resizeMode="contain"
-            className="w-[115px] h-[200px]"
+            className="w-[161px] h-[280px]"
           />
           <CustomButton
             title="Connectez-vous"
-            textStyles="font-psemibold"
+            textStyles="font-psemibold text-3xl"
             handlePress={() => router.push("/sign-in")}
             containerStyles="w-full mt-7"
           />

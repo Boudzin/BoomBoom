@@ -36,19 +36,13 @@ const SignUp = () => {
     <SafeAreaView className="bg-primary h-full">
       <ScrollView>
         <View
-          className="w-full flex justify-center h-full px-4 my-6"
+          className="w-full flex justify-center items-center h-full px-4 "
           style={{
             minHeight: Dimensions.get("window").height - 100,
           }}
         >
-          <Image
-            source={images.logo}
-            resizeMode="contain"
-            className="w-[115px] h-[34px]"
-          />
-
-          <Text className="text-2xl font-semibold text-white mt-10 font-psemibold">
-            Sign Up to Aora
+          <Text className="text-2xl font-semibold text-[#734789] mt-10 font-psemibold">
+            Inscrivez-vous
           </Text>
 
           <FormField
@@ -80,15 +74,15 @@ const SignUp = () => {
             isLoading={isSubmitting}
           />
 
-          <View className="flex justify-center pt-5 flex-row gap-2">
-            <Text className="text-lg text-gray-100 font-pregular">
+          <View className="flex justify-center items-center pt-5">
+            <Text className="text-lg text-black font-pregular">
               Vous avez déja un compte ?
             </Text>
             <Link
               href="/sign-in"
               className="text-lg font-psemibold text-secondary"
             >
-              Login
+              Connectez-vous
             </Link>
           </View>
         </View>
