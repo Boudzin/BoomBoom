@@ -33,7 +33,7 @@ const SignUp = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <SafeAreaView className="bg-blue-100  h-full">
       <ScrollView>
         <View
           className="w-full flex justify-center items-center h-full px-4 "
@@ -41,12 +41,12 @@ const SignUp = () => {
             minHeight: Dimensions.get("window").height - 100,
           }}
         >
-          <Text className="text-2xl font-semibold text-[#734789] mt-10 font-psemibold">
+          <Text className="text-2xl font-semibold text-[#734789] mt-10 font-pbold">
             Inscrivez-vous
           </Text>
 
           <FormField
-            title="Username"
+            title="Nom d'utilisateur"
             value={form.username}
             handleChangeText={(e) => setForm({ ...form, username: e })}
             otherStyles="mt-10"
@@ -61,16 +61,16 @@ const SignUp = () => {
           />
 
           <FormField
-            title="Password"
+            title="Mot de passe"
             value={form.password}
             handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-7"
           />
 
           <CustomButton
-            title="Sign Up"
+            title="Créer un compte"
             handlePress={submit}
-            containerStyles="mt-7"
+            containerStyles="mt-7 px-5"
             isLoading={isSubmitting}
           />
 
