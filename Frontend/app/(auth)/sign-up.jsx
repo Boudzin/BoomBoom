@@ -6,25 +6,30 @@ import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
 import { images } from "../../constants";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
+import axios from "axios";
 
 const SignUp = () => {
   const [isSubmitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
-    username: "",
+    styleMusique: "",
     email: "",
     password: "",
   });
 
+
   const submit = async () => {
-    if (form.username === "" || form.email === "" || form.password === "") {
+    if (form.styleMusique === "" || form.email === "" || form.password === "") {
       Alert.alert("Error", "Please fill in all fields");
     }
-
-    setSubmitting(true);
+    
     try {
-      const result = await createUser(form.email, form.password, form.username);
-      setUser(result);
-      setIsLogged(true);
+      axios.post("http://172.20.10.4:5001/register",{
+        email:form.email,
+        password:form.password,
+        styleMusique:form.styleMusique
+      })
+      .then((res)=>console.log("Reussi"))
+      .catch((e)=>console.log(e));
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {
@@ -46,9 +51,9 @@ const SignUp = () => {
           </Text>
 
           <FormField
-            title="Username"
-            value={form.username}
-            handleChangeText={(e) => setForm({ ...form, username: e })}
+            title="Style de musique"
+            value={form.styleMusique}
+            handleChangeText={(e) => setForm({ ...form, styleMusique: e })}
             otherStyles="mt-10"
           />
 
@@ -73,7 +78,7 @@ const SignUp = () => {
             containerStyles="mt-7"
             isLoading={isSubmitting}
           />
-
+          
           <View className="flex justify-center items-center pt-5">
             <Text className="text-lg text-black font-pregular">
               Vous avez déja un compte ?
