@@ -4,7 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, Alert, ScrollView, Dimensions, Image } from "react-native";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
-import { images } from "../../constants";
 
 const SignIn = () => {
   const [isSubmitting, setSubmitting] = useState(false);
@@ -79,6 +78,12 @@ const SignIn = () => {
               className="text-lg font-psemibold text-secondary"
             >
               Créer un compte
+            </Link>
+            <Link
+              href="/home"
+              className="text-lg font-psemibold text-secondary"
+            >
+              Home Page
             </Link>
           </View>
         </View>
