@@ -1,123 +1,101 @@
-import React, { useRef, useState } from "react";
-import {
-  View,
-  PanResponder,
-  Animated,
-  StyleSheet,
-  Dimensions,
-} from "react-native";
+import React, {
+  useImperativeHandle,
+  useRef,
+  useState,
+  forwardRef,
+} from "react";
+import { View, Animated, PanResponder, Text } from "react-native";
 
-const SCREEN_WIDTH = Dimensions.get("window").width;
+const SongCard = forwardRef(({ onSwipeLeft, onSwipeRight }, ref) => {
+  const pan = useRef(new Animated.ValueXY()).current;
+  const [liked, setLiked] = useState(false);
+  const [disliked, setDisliked] = useState(false);
 
-const COLORS = [
-  "#FFAAAA",
-  "#AAFFAA",
-  "#AAAAFF",
-  "#FFFFAA",
-  "#FFAAFF",
-  "#AAFFFF",
-];
-const SongCard = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [pan] = useState(COLORS.map(() => new Animated.ValueXY()));
+  useImperativeHandle(ref, () => ({
+    //Swipe a gauche avec le bouton
+    swipeLeft: () => {
+      Animated.spring(pan, {
+        toValue: { x: -500, y: 0 },
+        useNativeDriver: true,
+      }).start(() => {
+        onSwipeLeft();
+        pan.setValue({ x: 0, y: 0 });
+        pan.setOffset({ x: 0, y: 0 });
+      });
+    },
+    //Swipe a droite avec le bouton
+    swipeRight: () => {
+      Animated.spring(pan, {
+        toValue: { x: 500, y: 0 },
+        useNativeDriver: true,
+      }).start(() => {
+        onSwipeRight();
+        pan.setValue({ x: 0, y: 0 });
+        pan.setOffset({ x: 0, y: 0 });
+      });
+    },
+  }));
 
-  const createPanResponder = (index) => {
-    return PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
+  const panResponder = useRef(
+    PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
-        pan[index].setOffset({
-          x: pan[index].x._value,
-          y: pan[index].y._value,
+        pan.setOffset({
+          x: pan.x._value,
+          y: pan.y._value,
         });
       },
-      onPanResponderMove: (e, gestureState) => {
-        Animated.event([null, { dx: pan[index].x, dy: pan[index].y }], {
-          useNativeDriver: false,
-        })(e, gestureState);
-      },
-      onPanResponderRelease: (e, { dx, dy }) => {
-        if (Math.abs(dx) > 120) {
-          Animated.spring(pan[index], {
-            toValue: {
-              x: dx > 0 ? SCREEN_WIDTH : -SCREEN_WIDTH,
-              y: dy,
-            },
+      onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
+        useNativeDriver: false,
+      }),
+      //Quand le tactile est relaché
+      onPanResponderRelease: (e, gesture) => {
+        //Si la carte est a droite ajouter Like
+        if (gesture.dx > 120) {
+          Animated.spring(pan, {
+            toValue: { x: 500, y: gesture.dy },
             useNativeDriver: true,
           }).start(() => {
-            nextCard();
+            setLiked(true);
+            onSwipeRight();
+            pan.setValue({ x: 0, y: 0 });
+            setLiked(false);
+            pan.setOffset({ x: 0, y: 0 });
+          });
+          //Si la carte est a gauche ajouter disLike
+        } else if (gesture.dx < -120) {
+          Animated.spring(pan, {
+            toValue: { x: -500, y: gesture.dy },
+            useNativeDriver: true,
+          }).start(() => {
+            setDisliked(true);
+            onSwipeLeft();
+            pan.setValue({ x: 0, y: 0 });
+            setDisliked(false);
+            pan.setOffset({ x: 0, y: 0 });
           });
         } else {
-          Animated.spring(pan[index], {
+          Animated.spring(pan, {
             toValue: { x: 0, y: 0 },
             useNativeDriver: true,
           }).start();
         }
       },
-    });
-  };
+    })
+  ).current;
 
-  const [panResponders] = useState(
-    COLORS.map((_, index) => createPanResponder(index))
-  );
-
-  const nextCard = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex < COLORS.length - 1 ? prevIndex + 1 : prevIndex
-    );
-  };
-
-  const rotate = (index) =>
-    pan[index].x.interpolate({
-      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-      outputRange: ["-10deg", "0deg", "10deg"],
-      extrapolate: "clamp",
-    });
-
-  const rotateAndTranslate = (index) => ({
-    transform: [
-      { rotate: rotate(index) },
-      { translateX: pan[index].x },
-      { translateY: pan[index].y },
-    ],
-  });
-
-  const renderCards = () => {
-    return COLORS.map((color, i) => {
-      if (i < currentIndex) {
-        return null;
-      } else if (i === currentIndex) {
-        return (
-          <Animated.View
-            key={i}
-            {...panResponders[i].panHandlers}
-            className="w-[300px] h-[400px] rounded-lg justify-center items-center absolute"
-            style={[
-              rotateAndTranslate(i),
-              ,
-              { backgroundColor: color, zIndex: COLORS.length - i },
-            ]}
-          />
-        );
-      } else {
-        return (
-          <Animated.View
-            key={i}
-            className="w-[300px] h-[400px] rounded-lg justify-center items-center absolute"
-            style={[
-              {
-                backgroundColor: color,
-                zIndex: COLORS.length - i - 1,
-              },
-            ]}
-          />
-        );
-      }
-    }).reverse();
-  };
   return (
-    <View className="flex-1 justify-center items-center ">{renderCards()}</View>
+    <Animated.View
+      style={{
+        transform: [{ translateX: pan.x }, { translateY: pan.y }],
+      }}
+      {...panResponder.panHandlers}
+    >
+      <View className="w-[300px] h-[500px] bg-slate-500 justify-center items-center rounded-3xl shadow-sm">
+        <Text className=" font-pbold text-base ">Style de musique</Text>
+      </View>
+    </Animated.View>
   );
-};
+});
 
 export default SongCard;
