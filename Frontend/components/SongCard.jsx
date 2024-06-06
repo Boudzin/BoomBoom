@@ -91,7 +91,7 @@ const SongCard = forwardRef(({ onSwipeLeft, onSwipeRight }, ref) => {
       }}
       {...panResponder.panHandlers}
     >
-      <View className="w-[300px] h-[500px] bg-slate-500 justify-center items-center rounded-3xl shadow-sm">
+      <View className="w-[300px] h-[500px] bg-[#7D82B8] justify-center items-center rounded-3xl shadow-sm">
         <Text className=" font-pbold text-base ">Style de musique</Text>
       </View>
     </Animated.View>

@@ -4,6 +4,13 @@ import SongCard from "../../components/SongCard";
 import { Link } from "expo-router";
 import { images } from "../../constants";
 import CustomButton from "../../components/CustomButton";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faEarlybirds } from "@fortawesome/free-brands-svg-icons";
+import {
+  faHeart,
+  faHeartCircleBolt,
+  faHeartCircleCheck,
+} from "@fortawesome/free-solid-svg-icons";
 
 const home = () => {
   const cardRef = useRef(null);
@@ -52,13 +59,21 @@ const home = () => {
         )}
         <View className=" flex-row mt-5 w-full justify-center">
           <CustomButton
-            title="Dislike"
-            containerStyles="mt-3 mx-3 px-5"
+            title={
+              <FontAwesomeIcon
+                icon="fa-solid fa-xmark"
+                color="white"
+                size={40}
+              />
+            }
+            containerStyles="mt-3 mx-3 px-5 pt-4 h-20 rounded-full "
             handlePress={() => cardRef.current.swipeLeft()}
           />
           <CustomButton
-            title="Like"
-            containerStyles="mt-3 px-5 mx-3"
+            title={
+              <FontAwesomeIcon icon="far fa-heart" color="white" size={40} />
+            }
+            containerStyles="mt-3 mx-3 px-5 pt-4 h-20 rounded-full "
             handlePress={() => cardRef.current.swipeRight()}
           />
         </View>

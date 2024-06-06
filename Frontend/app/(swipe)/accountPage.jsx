@@ -14,10 +14,10 @@ const accountPage = () => {
             resizeMode="contain"
           />
         </Link>
+        <Text className="text-lg font-psemibold justify-center items-center">
+          Compte personnel
+        </Text>
       </View>
-      <Text className="text-lg font-psemibold justify-center items-center">
-        Compte personnel
-      </Text>
     </View>
   );
 };
