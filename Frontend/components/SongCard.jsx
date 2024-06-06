@@ -23,7 +23,7 @@ const SongCard = forwardRef(({ onSwipeLeft, onSwipeRight }, ref) => {
         setTimeout(() => {
           pan.setValue({ x: 0, y: 0 });
           setDisliked(false);
-        }, 500); // Ajout d'un délai pour que l'animation puisse se terminer correctement
+        }, 100); // Ajout d'un délai pour que l'animation puisse se terminer correctement
       });
     },
     //Swipe a droite avec le bouton
@@ -37,7 +37,7 @@ const SongCard = forwardRef(({ onSwipeLeft, onSwipeRight }, ref) => {
         setTimeout(() => {
           pan.setValue({ x: 0, y: 0 });
           setLiked(false);
-        }, 500); // Ajout d'un délai pour que l'animation puisse se terminer correctement
+        }, 100); // Ajout d'un délai pour que l'animation puisse se terminer correctement
       });
     },
   }));
@@ -67,7 +67,7 @@ const SongCard = forwardRef(({ onSwipeLeft, onSwipeRight }, ref) => {
             setTimeout(() => {
               pan.setValue({ x: 0, y: 0 });
               setLiked(false);
-            }, 500); // Ajout d'un délai pour que l'animation puisse se terminer correctement
+            }, 100); // Ajout d'un délai pour que l'animation puisse se terminer correctement
           });
           //Si la carte est a gauche ajouter disLike
         } else if (gesture.dx < -120) {
@@ -80,7 +80,7 @@ const SongCard = forwardRef(({ onSwipeLeft, onSwipeRight }, ref) => {
             setTimeout(() => {
               pan.setValue({ x: 0, y: 0 });
               setDisliked(false);
-            }, 500); // Ajout d'un délai pour que l'animation puisse se terminer correctement
+            }, 100); // Ajout d'un délai pour que l'animation puisse se terminer correctement
           });
         } else {
           Animated.spring(pan, {
