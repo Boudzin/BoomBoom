@@ -5,12 +5,6 @@ import { Link } from "expo-router";
 import { images } from "../../constants";
 import CustomButton from "../../components/CustomButton";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faEarlybirds } from "@fortawesome/free-brands-svg-icons";
-import {
-  faHeart,
-  faHeartCircleBolt,
-  faHeartCircleCheck,
-} from "@fortawesome/free-solid-svg-icons";
 
 const home = () => {
   const cardRef = useRef(null);

@@ -3,7 +3,6 @@ import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 
 //Icon Lib
-
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
