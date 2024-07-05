@@ -2,17 +2,40 @@ import React, {
   useImperativeHandle,
   useRef,
   useState,
+  useEffect,
   forwardRef,
 } from "react";
-import { View, Animated, PanResponder, Text } from "react-native";
+import { View, Animated, PanResponder, Text, Button } from "react-native";
 
 const SongCard = forwardRef(({ onSwipeLeft, onSwipeRight }, ref) => {
   const pan = useRef(new Animated.ValueXY()).current;
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
+  const [track, setTrack] = useState(null);
+
+  const fetchRandomTrack = () => {
+    fetch('https://www.theaudiodb.com/api/v1/json/2/track.php?m=2115888')
+      .then((response) => response.text())  
+      .then((text) => { 
+        const randomNumber = Math.floor(Math.random()*10);
+        console.log("Numéro au hasard",randomNumber);     
+        try {
+          const data = JSON.parse(text);
+          const artist = data.track[randomNumber]; 
+          console.log('idArtist:', artist.idArtist); 
+          setTrack(artist);
+        } catch (error) {
+          throw new Error("Received non-JSON response");
+        }
+      })
+      .catch((error) => console.error('Error fetching data:', error));
+  };
+
+  useEffect(() => {
+    fetchRandomTrack();
+  }, []);
 
   useImperativeHandle(ref, () => ({
-    //Swipe a gauche avec le bouton
     swipeLeft: () => {
       Animated.spring(pan, {
         toValue: { x: -500, y: 0 },
@@ -23,10 +46,10 @@ const SongCard = forwardRef(({ onSwipeLeft, onSwipeRight }, ref) => {
         setTimeout(() => {
           pan.setValue({ x: 0, y: 0 });
           setDisliked(false);
-        }, 100); // Ajout d'un délai pour que l'animation puisse se terminer correctement
+          fetchRandomTrack();
+        }, 100);
       });
     },
-    //Swipe a droite avec le bouton
     swipeRight: () => {
       Animated.spring(pan, {
         toValue: { x: 500, y: 0 },
@@ -37,7 +60,8 @@ const SongCard = forwardRef(({ onSwipeLeft, onSwipeRight }, ref) => {
         setTimeout(() => {
           pan.setValue({ x: 0, y: 0 });
           setLiked(false);
-        }, 100); // Ajout d'un délai pour que l'animation puisse se terminer correctement
+          fetchRandomTrack();
+        }, 100);
       });
     },
   }));
@@ -54,9 +78,7 @@ const SongCard = forwardRef(({ onSwipeLeft, onSwipeRight }, ref) => {
       onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
         useNativeDriver: false,
       }),
-      //Quand le tactile est relaché
       onPanResponderRelease: (e, gesture) => {
-        //Si la carte est a droite ajouter Like
         if (gesture.dx > 120) {
           Animated.spring(pan, {
             toValue: { x: 500, y: gesture.dy },
@@ -67,9 +89,9 @@ const SongCard = forwardRef(({ onSwipeLeft, onSwipeRight }, ref) => {
             setTimeout(() => {
               pan.setValue({ x: 0, y: 0 });
               setLiked(false);
-            }, 100); // Ajout d'un délai pour que l'animation puisse se terminer correctement
+              fetchRandomTrack();
+            }, 100);
           });
-          //Si la carte est a gauche ajouter disLike
         } else if (gesture.dx < -120) {
           Animated.spring(pan, {
             toValue: { x: -500, y: gesture.dy },
@@ -80,7 +102,8 @@ const SongCard = forwardRef(({ onSwipeLeft, onSwipeRight }, ref) => {
             setTimeout(() => {
               pan.setValue({ x: 0, y: 0 });
               setDisliked(false);
-            }, 100); // Ajout d'un délai pour que l'animation puisse se terminer correctement
+              fetchRandomTrack();
+            }, 100);
           });
         } else {
           Animated.spring(pan, {
@@ -100,9 +123,23 @@ const SongCard = forwardRef(({ onSwipeLeft, onSwipeRight }, ref) => {
       {...panResponder.panHandlers}
     >
       <View className="w-[300px] h-[500px] bg-[#7D82B8] justify-center items-center rounded-3xl shadow-sm">
-        <Text className=" font-pbold text-base text-white ">
-          Style de musique
-        </Text>
+        {track ? (
+          <>
+            <Text className=" font-pbold text-base text-white ">
+              {track.strTrack}
+            </Text>
+            <Text className=" font-pbold text-base text-white ">
+              {track.strAlbum}
+            </Text>
+            <Text className=" font-pbold text-base text-white ">
+              {track.strArtist}
+            </Text>
+          </>
+        ) : (
+          <Text className=" font-pbold text-base text-white ">
+            Loading...
+          </Text>
+        )}
       </View>
     </Animated.View>
   );
